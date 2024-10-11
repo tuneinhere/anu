@@ -35,7 +35,7 @@ async def _clear_(chat_id):
 
 @app.on_message(filters.command(ACTIVEVC_COMMAND) & SUDOERS)
 async def activevc(_, message: Message):
-    mystic = await message.reply_text("ɢᴇᴛᴛɪɴɢ ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ....ᴘʟᴇᴀsᴇ ʜᴏʟᴅ ᴏɴ")
+    mystic = await message.reply_text("<blockquote><b>Lagi Ngambil data yang make Bot Music</b></blockquote>")
     served_chats = await get_active_chats()
     text = ""
     j = 0
@@ -52,17 +52,17 @@ async def activevc(_, message: Message):
             await _clear_(x)
             continue
     if not text:
-        await mystic.edit_text("ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ's")
+        await mystic.edit_text("<blockquote><b>Lagi ga ada yang denger Music<b></blockquote>")
     else:
         await mystic.edit_text(
-            f"**ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ's:-**\n\n{text}",
+            f"**Daftar yang lagi Demus:-**\n\n{text}",
             disable_web_page_preview=True,
         )
 
 
 @app.on_message(filters.command(ACTIVEVIDEO_COMMAND) & SUDOERS)
 async def activevi_(_, message: Message):
-    mystic = await message.reply_text("ɢᴇᴛᴛɪɴɢ ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ....ᴘʟᴇᴀsᴇ ʜᴏʟᴅ ᴏɴ")
+    mystic = await message.reply_text("<blockquote><b>Lagi Ngambil data yang make Bot Music</b></blockquote>")
     served_chats = await get_active_video_chats()
     text = ""
     j = 0
@@ -79,10 +79,10 @@ async def activevi_(_, message: Message):
             await _clear_(x)
             continue
     if not text:
-        await mystic.edit_text("ɴᴏ ᴀᴄᴛɪᴠᴇ ᴠɪᴅᴇᴏ ᴄʜᴀᴛ's")
+        await mystic.edit_text("<blockquote><b>Lagi ga ada yang Nonton<b></blockquote>")
     else:
         await mystic.edit_text(
-            f"**ᴀᴄᴛɪᴠᴇ ᴠɪᴅᴇᴏ ᴄʜᴀᴛ's:-**\n\n{text}",
+            f"**Daftar yang lagi Nonton:-**\n\n{text}",
             disable_web_page_preview=True,
         )
 
@@ -91,10 +91,10 @@ async def activevi_(_, message: Message):
 async def vc(client, message: Message):
     ac_audio = str(len(await get_active_chats()))
 
-    await message.reply_text(f"ᴀᴄᴛɪᴠᴇ ᴄʜᴀᴛs ɪɴғᴏ: {ac_audio}")
+    await message.reply_text(f"Nih Datanya: {ac_audio}")
 
 
-__MODULE__ = "Acᴛɪᴠᴇ"
+__MODULE__ = "Active"
 __HELP__ = """
 <b>✧ /ac</b> - Cʜᴇᴄᴋ ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛs ᴏɴ ʙᴏᴛ.
 
