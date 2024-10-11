@@ -276,8 +276,8 @@ async def get_playmode(chat_id: int) -> str:
     if not mode:
         mode = await playmodedb.find_one({"chat_id": chat_id})
         if not mode:
-            playmode[chat_id] = "Direct"
-            return "Direct"
+            playmode[chat_id] = "Inline"
+            return "Inline"
         playmode[chat_id] = mode["mode"]
         return mode["mode"]
     return mode
@@ -628,11 +628,11 @@ async def save_video_bitrate(chat_id: int, bitrate: str):
 
 
 async def get_aud_bit_name(chat_id: int) -> str:
-    return audio.get(str(chat_id), "HIGH")
+    return audio.get(str(chat_id), "STUDIO")
 
 
 async def get_vid_bit_name(chat_id: int) -> str:
-    return video.get(str(chat_id), "HD_720p")
+    return video.get(str(chat_id), "UHD_4K")
 
 
 async def get_audio_bitrate(chat_id: int) -> str:
