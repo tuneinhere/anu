@@ -14,6 +14,7 @@ import random
 import asyncio
 from typing import Union
 
+from async_lru import alru_cache
 from yt_dlp import YoutubeDL
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
@@ -92,6 +93,7 @@ class YouTube:
             return None
         return text[offset : offset + length]
 
+    @alru_cache(maxsize=None)
     async def details(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
@@ -109,6 +111,7 @@ class YouTube:
                 duration_sec = int(time_to_seconds(duration_min))
         return title, duration_min, duration_sec, thumbnail, vidid
 
+    @alru_cache(maxsize=None)
     async def title(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
@@ -119,6 +122,7 @@ class YouTube:
             title = result["title"]
         return title
 
+    @alru_cache(maxsize=None)
     async def duration(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
@@ -129,6 +133,7 @@ class YouTube:
             duration = result["duration"]
         return duration
 
+    @alru_cache(maxsize=None)
     async def thumbnail(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
@@ -164,6 +169,7 @@ class YouTube:
         else:
             return 0, stderr.decode()
 
+    @alru_cache(maxsize=None)
     async def playlist(self, link, limit, videoid: Union[bool, str] = None):
         if videoid:
             link = self.listbase + link
@@ -184,6 +190,7 @@ class YouTube:
             result = []
         return result
 
+    @alru_cache(maxsize=None)
     async def track(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
             link = self.base + link
@@ -217,7 +224,7 @@ class YouTube:
             "noplaylist": True,
             "quiet": True,
             "extract_flat": "in_playlist",
-            "cookiefile": f"'{cookies()}'",
+            "cookiefile": f"{cookies()}",
         }
         with YoutubeDL(options) as ydl:
             info_dict = ydl.extract_info(f"ytsearch: {q}", download=False)
@@ -235,6 +242,7 @@ class YouTube:
             }
             return info, details["id"]
 
+    @alru_cache(maxsize=None)
     @asyncify
     def formats(self, link: str, videoid: Union[bool, str] = None):
         if videoid:
@@ -244,7 +252,7 @@ class YouTube:
 
         ytdl_opts = {
             "quiet": True,
-            "cookiefile": f"'{cookies()}'",
+            "cookiefile": f"{cookies()}",
         }
 
         ydl = YoutubeDL(ytdl_opts)
@@ -277,6 +285,7 @@ class YouTube:
                     )
         return formats_available, link
 
+    @alru_cache(maxsize=None)
     async def slider(
         self,
         link: str,
@@ -319,17 +328,17 @@ class YouTube:
                 "nocheckcertificate": True,
                 "quiet": True,
                 "no_warnings": True,
-                "cookiefile": f"'{cookies()}'",
+                "cookiefile": f"{cookies()}",
                 "prefer_ffmpeg": True,
             }
 
-            x = YoutubeDL(ydl_optssx)
-            info = x.extract_info(link, False)
-            xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
-            if os.path.exists(xyz):
+            with YoutubeDL(ydl_optssx) as x:
+                info = x.extract_info(link, False)
+                xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
+                if os.path.exists(xyz):
+                    return xyz
+                x.download([link])
                 return xyz
-            x.download([link])
-            return xyz
 
         @asyncify
         def video_dl():
@@ -342,16 +351,16 @@ class YouTube:
                 "quiet": True,
                 "no_warnings": True,
                 "prefer_ffmpeg": True,
-                "cookiefile": f"'{cookies()}'",
+                "cookiefile": f"{cookies()}",
             }
 
-            x = YoutubeDL(ydl_optssx)
-            info = x.extract_info(link, False)
-            xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
-            if os.path.exists(xyz):
+            with YoutubeDL(ydl_optssx) as x:
+                info = x.extract_info(link, False)
+                xyz = os.path.join("downloads", f"{info['id']}.{info['ext']}")
+                if os.path.exists(xyz):
+                    return xyz
+                x.download([link])
                 return xyz
-            x.download([link])
-            return xyz
 
         @asyncify
         def song_video_dl():
@@ -367,13 +376,13 @@ class YouTube:
                 "no_warnings": True,
                 "prefer_ffmpeg": True,
                 "merge_output_format": "mp4",
-                "cookiefile": f"'{cookies()}'",
+                "cookiefile": f"{cookies()}",
             }
 
-            x = YoutubeDL(ydl_optssx)
-            info = x.extract_info(link)
-            file_path = x.prepare_filename(info)
-            return file_path
+            with YoutubeDL(ydl_optssx) as x:
+                info = x.extract_info(link)
+                file_path = x.prepare_filename(info)
+                return file_path
 
         @asyncify
         def song_audio_dl():
@@ -394,13 +403,13 @@ class YouTube:
                         "preferredquality": "192",
                     }
                 ],
-                "cookiefile": f"'{cookies()}'",
+                "cookiefile": f"{cookies()}",
             }
 
-            x = YoutubeDL(ydl_optssx)
-            info = x.extract_info(link)
-            file_path = x.prepare_filename(info)
-            return file_path
+            with YoutubeDL(ydl_optssx) as x:
+                info = x.extract_info(link)
+                file_path = x.prepare_filename(info)
+                return file_path
 
         if songvideo:
             return await song_video_dl()
